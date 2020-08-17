@@ -233,8 +233,21 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
     const id = crypto.randomBytes(4).toString('HEX');  
     await connection('ongs').insert({     <<<<<-------------------- código adicionado
       id, name, email, whatsapp, city, uf
-    })  
-    console.log(data)
+    })
     return response.json();
   });
   ```
+- Este método retornará o JSON abaixo: `return response.json({ id });`
+   - Assim, o método completo ficará:
+   ```javascript
+   routes.post('/ongs/', async (request, response) => {
+    // const data = request.body;
+    const { name, email, whatsapp, city, uf } = request.body;
+    const id = crypto.randomBytes(4).toString('HEX');  
+    await connection('ongs').insert({     <<<<<-------------------- código adicionado
+      id, name, email, whatsapp, city, uf
+    })
+    return response.json({ id });
+  });
+  ```
+- Agora, vamos abrir o Insomnia e executar o método `POST` para criar ONGs. Fazemos isso clicando em "Send".
