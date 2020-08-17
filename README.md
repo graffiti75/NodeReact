@@ -11,14 +11,10 @@
 
 - Criar projeto NPM:
   `npm init -y`
-- Instalar Express no NPM:
-  `npm install express`
-- Rodar servidor:
-  `node index.js`
-- Endereço do servidor Backend:
-  http://localhost:3333/
-- Baixar o Insomnia (software similar ao Postman):
-  https://insomnia.rest/
+- Instalar Express no NPM: `npm install express`
+- Rodar servidor: `node index.js`
+- Endereço do servidor Backend: http://localhost:3333/
+- Baixar o Insomnia (software similar ao Postman): https://insomnia.rest/
 
 ## SPA
 
@@ -27,20 +23,16 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
 ## Projeto Frontend
 
 - Criar projeto React Native com `npx`:
-  `npx` não instala um pacote, como o `npm`; ao invés disso ele apenas executa um pacote).
-  `npx create-react-app frontend`
-- Github do Create React App:
-  https://github.com/facebook/create-react-app
-- Na pasta Frontend, para rodar o projeto React Native:
-  `npm start`
-- O projeto será rodado em:
-  `http://localhost:3000/`
+   - `npx` não instala um pacote, como o `npm`; ao invés disso ele apenas executa um pacote).
+   - Código para criar o projeto: `npx create-react-app frontend`
+- Github do Create React App: https://github.com/facebook/create-react-app
+- Na pasta Frontend, para rodar o projeto React Native:  `npm start`
+- O projeto será rodado em: http://localhost:3000/
    
 ## Parâmetros de Backend
 
 - Query Params: Parâmetros nomeados enviados na rota após "?" (filtros, paginação).
-  - Acessado no Insomnia assim:
-    `GET /users?name=Rodrigo&idade=25`
+  - Acessado no Insomnia assim: `GET /users?name=Rodrigo&idade=25`
   - Acessado no Node assim:
     ```javascript
     app.get('/users/', (request, response) => {
@@ -53,8 +45,7 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
     });
     ```
 - Route Params: Parâmetros utilizados para identificar recursos.
-  - Acessado no Insomnia assim:
-    `GET /users/1`
+  - Acessado no Insomnia assim: `GET /users/1`
   - Acessado no Node assim:
     ```javascript
     app.get('/users/:id', (request, response) => {
@@ -87,14 +78,12 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
       });
     });
     ```
-  - Para que esse tipo de requisição funcione, é necessário adicionar no cabeçalho do index.js:
-    `app.use(express.json());`
+  - Para que esse tipo de requisição funcione, é necessário adicionar no cabeçalho do index.js: `app.use(express.json());`
 
 ## Nodemon
 
 - Para não ficar reiniciando o Node toda vez que há alterações no código, usamos o Nodemon.
-- Para instalá-lo, digitar:
-  `npm install nodemon -D`
+- Para instalá-lo, digitar: `npm install nodemon -D`
 - `-D`implica em salvar o Nodemon, no arquivo package.json, na tag "devDependencies" ao invés da tag "dependencies".
   - Ou seja, essa ferramenta só será usada enquanto estivermos desenvolvendo uma aplicação.
   - Quando publicarmos essa aplicação em um servidor de Produção, não precisaremos ficar monitorando o código.
@@ -104,21 +93,19 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
     "start": "nodemon index.js"
   },
   ```
-- Então, basta digitarmos "npm start" para rodar essa alteração.
+- Então, basta digitarmos `npm start` para rodar essa alteração.
 
 ## Bancos de Dados
 
 - SQL: MySQL, SQLite, PostgreSQL, Oracle, Microsoft SQL Server
 - NoSQL: MongoDb, CouchDb
 - Configuração e comunicação com Bancos de Dados:
-  - Driver: `select * from users`
-  - Query Builder: `table('users').select('*').where()`
-    - Qual Query Builder será utilizado no projeto? Knex.js
-    - Instalação:
-      `npm install knex`
-      `npm install sqlite3`
-    - Criar o arquivo `knexfile.js`, que é o arquivo que contém as configurações de acesso ao Banco de Dados para os ambientes de "development", "staging" e "production".
-      `npx knex init`
+   - Driver:  `select * from users`
+   - Query Builder:  `table('users').select('*').where()`
+   - Qual Query Builder será utilizado no projeto? `knex.js`
+   - Instalação do Knex: `npm install knex`
+   - Instalação do Banco de Dados SQLite: `npm install sqlite3`
+   - Criar o arquivo `knexfile.js`, que é o arquivo que contém as configurações de acesso ao Banco de Dados para os ambientes de "development", "staging" e "production": `npx knex init`
 
 ## Banco de Dados do Projeto
 
@@ -150,10 +137,8 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
     }
   },
   ```   
-- Para criar a 1ª migração, digitar o comando abaixo na pasta Backend:
-    `npx knex migrate:make migration_name`
-  - Neste caso, o nome da migração será "create_ongs". Logo, o comando ficará assim:
-    `npx knex migrate:make create_ongs`
+- Para criar a 1ª migração, digitar o comando abaixo na pasta Backend: `npx knex migrate:make migration_name`
+  - Neste caso, o nome da migração será "create_ongs". Logo, o comando ficará assim: `npx knex migrate:make create_ongs`
 - Adicionar a tag "useNullAsDefault" na tag "development" do knexfile.js, a fim de sumir com o seguinte warning "sqlite does not support inserting default values. Set the `useNullAsDefault` flag to hide this warning. (see docs http://knexjs.org/#Builder-insert)."
   ```javascript
   development: {
@@ -183,10 +168,8 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
     return knex.schema.dropTable('ongs');
   };
   ```
-- Para criar a tabela, digitar:
-  `npx knex migrate:latest`
-- Agora criaremos a 2ª migração, onde criaremos os Casos das ONGs:
-  `npx knex migrate:make create_incidents`
+- Para criar a tabela, digitar: `npx knex migrate:latest`
+- Agora criaremos a 2ª migração, onde criaremos os Casos das ONGs: `npx knex migrate:make create_incidents`
   - Eis o conteúdo do arquivo "20200813232725_create_incidents.js":
     ```javascript
     exports.up = function(knex) {
@@ -203,18 +186,14 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
       return knex.schema.dropTable('incidents');
     };
     ```
-  - Para criar a tabela, rodamos:
-    `npx knex migrate:latest`
-- Para desfazer alguma migration:
-    `npx knex migrate:rollback`
-- Para saber todas as migrations já criadas:
-    `npx knex migrate:status`
+  - Para criar a tabela, rodamos: `npx knex migrate:latest`
+- Para desfazer alguma migration: `npx knex migrate:rollback`
+- Para saber todas as migrations já criadas: `npx knex migrate:status`
     
 ## Criar os Webservices de ONGs
 
 - Criar um Folder no Insomnia, com o nome "ONGs", e nele criar uma requisição POST chamada Create.
-- Colocar como endereço da requisição:
-  http://localhost:3333/ongs
+- Colocar como endereço da requisição: http://localhost:3333/ongs
 - Colocar como Body da requisição:
   ```javascript
   {
@@ -225,8 +204,7 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
     "uf": "SC"
   }
   ```
-- Criar o ID a ser inserido, com o comando abaixo:
-  `const id = crypto.randomBytes(4).toString('HEX');`
+- Criar o ID a ser inserido, com o comando abaixo: `const id = crypto.randomBytes(4).toString('HEX');`
 - Criar o arquivo `connection.js` dentro da pasta database. Inserir nele o seguinte código:
   ```javascript
   const knex = require('knex');
