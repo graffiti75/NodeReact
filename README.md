@@ -192,9 +192,11 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
     
 ## Criar os Webservices de ONGs
 
+### @POST Create ONG
+
 - Criar um Folder no Insomnia, com o nome "ONGs", e nele criar uma requisição POST chamada Create.
 - Colocar como endereço da requisição: http://localhost:3333/ongs
-- Colocar como Body da requisição:
+- Colocar como Body da requisição o tipo JSON, com os seguintes dados:
   ```javascript
   {
     "name": "APAD",
@@ -237,7 +239,7 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
     return response.json();
   });
   ```
-- Este método retornará o JSON abaixo: `return response.json({ id });`
+- Este método pode retornar qualquer um dos campos, mas no nosso caso, retornaremos um JSON com seu ID: `return response.json({ id });`
    - Assim, o método completo ficará:
    ```javascript
    routes.post('/ongs/', async (request, response) => {
@@ -251,3 +253,47 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
   });
   ```
 - Agora, vamos abrir o Insomnia e executar o método `POST` para criar ONGs. Fazemos isso clicando em "Send".
+   - Desta forma, acabamos de criar uma ONG.
+
+### @GET List ONGs
+
+- Agora vamos criar uma requisição GET chamada List.
+- Colocar como endereço da requisição: http://localhost:3333/ongs
+- Obter dados das ONGs no no Banco de Dados:
+   ```javascript
+   routes.get('/ongs/', async (request, response) => {
+       const ongs = await connection('ongs').select('*');
+       return response.json(ongs);
+   });
+   ```
+- Colocar como Body da requisição o tipo "No Body".
+- Agora, vamos executar esse método `GET` no Insomnia. Fazemos isso clicando em "Send".
+   - Desta forma, acabamos de obter uma listagem de ONGs:
+   ```json
+   [
+     {
+       "id": "83e64a32",
+       "name": "APAD",
+       "email": "contato@apad.com.br",
+       "whatsapp": "4700000000",
+       "city": "Rio do Sul",
+       "uf": "SC"
+     },
+     {
+       "id": "47d91920",
+       "name": "APAD",
+       "email": "contato@apad.com.br",
+       "whatsapp": "4700000000",
+       "city": "Rio do Sul",
+       "uf": "SC"
+     },
+     {
+       "id": "d3bcaf33",
+       "name": "APAD",
+       "email": "contato@apad.com.br",
+       "whatsapp": "4700000000",
+       "city": "Rio do Sul",
+       "uf": "SC"
+     }
+   ]
+   ```
