@@ -297,3 +297,38 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
      }
    ]
    ```
+   
+## Controllers
+
+- Agora, vamos dar uma reorganizada em nosso código.
+- Vamos criar uma pasta `controllers` dentro do diretório `src`, e nela criar o arquivo `OngController.js`.
+- Neste arquivo teremos o seguinte código:
+   ```javascript
+   const connection = require('../database/connection');
+   const crypto = require('crypto');
+   module.exports = {
+       async list(request, response) {
+           const ongs = await connection('ongs').select('*');
+           return response.json(ongs);
+       },
+       async create(request, response) {
+           const { name, email, whatsapp, city, uf } = request.body;
+           const id = crypto.randomBytes(4).toString('HEX');
+           await connection('ongs').insert({
+               id, name, email, whatsapp, city, uf
+           })
+           return response.json({ id });
+       }
+   };
+   ```
+- Desta forma, o código do arquivo `routes.js` ficará assim:
+   ```javascript
+   const express = require('express');
+   const OngController = require('./controllers/OngController');
+   const routes = express.Router();
+
+   routes.get('/ongs/', OngController.list);
+   routes.post('/ongs/', OngController.create);
+
+   module.exports = routes;
+   ```
