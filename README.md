@@ -335,17 +335,62 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
    
 ## Criar os Webservices de Casos (Incidents)
 
+#### @POST Create Incident
+
 - No projeto Backend, criar o arquivo `IncidentControllers.js` na pasta `src/controllers/`.
 - Adicionar a ele o seguinte código-fonte:
    ```javascript
+   const connection = require('../database/connection');
+   const crypto = require('crypto');
+
+   module.exports = {
+      async create(request, response) {
+         const { title, description, value } = request.body;
+      }
+   };
+   ```
+- Agora, vamos abrir o Insomnia e criar uma pasta chamada `Casos`, e nela criar uma requisição POST chamada Create.
+- Colocar como endereço da requisição: http://localhost:3333/incidents
+- Colocar como Body da requisição o tipo JSON, com os seguintes dados:
+   ```javascript
+   {
+	   "title": "Caso 1",
+   	"description": "Detalhes do caso",
+	   "value": 120
+   }
+  ```
+- Criar um cabeçalho na aba "Header", e nele criar uma "Authorization" e inserir como seu valor o ID da ONG que estará conectada ao Incident.
+   - Neste caso, o ID que utilizaremos será o ID da primeira ONG criada. Em nosso caso, este valor equivale a "83e64a32".
+- Agora vamos atualizar o arquivo `IncidentControllers.js` com o seguinte código-fonte:
+const connection = require('../database/connection');
+const crypto = require('crypto');
+   ```javascript
+   module.exports = {
+      async create(request, response) {
+         const { title, description, value } = request.body;
+         const ong_id = request.headers.authorization;
+         const [id] = await connection('incidents').insert({
+            title, description, value, ong_id
+         });
+         return response.json({ id });
+      }
+   };
+   ```
+- Atualizar o arquivo `routes.js` com o seguinte código:
+   ```javascript
    const express = require('express');
    const OngController = require('./controllers/OngController');
+   const IncidentController = require('./controllers/IncidentController');
    const routes = express.Router();
 
    routes.get('/ongs/', OngController.list);
    routes.post('/ongs/', OngController.create);
+   routes.post('/incidents/', IncidentController.create);
 
    module.exports = routes;
    ```
-- Agora, vamos abrir o Insomnia e criar uma pasta chamada `Casos`, e nela criar uma requisição POST chamada Create.
-- Colocar como endereço da requisição: http://localhost:3333/incidents
+- Agora, basta abrirmos o Insomnia e clicarmos no botão "Send". E pronto, criamos nosso primeiro Caso para a ONG de ID "83e64a32".
+
+#### @GET List Incidents
+
+
