@@ -192,7 +192,7 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
     
 ## Criar os Webservices de ONGs
 
-### @POST Create ONG
+#### @POST Create ONG
 
 - Criar um Folder no Insomnia, com o nome "ONGs", e nele criar uma requisição POST chamada Create.
 - Colocar como endereço da requisição: http://localhost:3333/ongs
@@ -255,7 +255,7 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
 - Agora, vamos abrir o Insomnia e executar o método `POST` para criar ONGs. Fazemos isso clicando em "Send".
    - Desta forma, acabamos de criar uma ONG.
 
-### @GET List ONGs
+#### @GET List ONGs
 
 - Agora vamos criar uma requisição GET chamada List.
 - Colocar como endereço da requisição: http://localhost:3333/ongs
@@ -332,3 +332,20 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
 
    module.exports = routes;
    ```
+   
+## Criar os Webservices de Casos (Incidents)
+
+- No projeto Backend, criar o arquivo `IncidentControllers.js` na pasta `src/controllers/`.
+- Adicionar a ele o seguinte código-fonte:
+   ```javascript
+   const express = require('express');
+   const OngController = require('./controllers/OngController');
+   const routes = express.Router();
+
+   routes.get('/ongs/', OngController.list);
+   routes.post('/ongs/', OngController.create);
+
+   module.exports = routes;
+   ```
+- Agora, vamos abrir o Insomnia e criar uma pasta chamada `Casos`, e nela criar uma requisição POST chamada Create.
+- Colocar como endereço da requisição: http://localhost:3333/incidents
