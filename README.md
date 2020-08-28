@@ -393,4 +393,53 @@ const crypto = require('crypto');
 
 #### @GET List Incidents
 
+- Atualizar o arquivo `IncidentController.js`:
+   ```javascript
+   const connection = require('../database/connection');
+   const crypto = require('crypto');
 
+   module.exports = {
+      async list(request, response) {
+         const incidents = await connection('incidents').select('*');
+         return response.json(incidents);
+      },
+      async create(request, response) {
+         const { title, description, value } = request.body;
+         const ong_id = request.headers.authorization;
+         const [id] = await connection('incidents').insert({
+            title, description, value, ong_id
+         });
+         return response.json({ id });
+      }
+   };
+   ```
+- Atualizar o arquivo `routes.js` com o seguinte código:
+   ```javascript
+   const express = require('express');
+   const OngController = require('./controllers/OngController');
+   const IncidentController = require('./controllers/IncidentController');
+   const routes = express.Router();
+
+   routes.get('/ongs/', OngController.list);
+   routes.post('/ongs/', OngController.create);
+   routes.get('/incidents/', IncidentController.list);
+   routes.post('/incidents/', IncidentController.create);
+
+   module.exports = routes;
+   ```
+- Agora vamos criar uma requisição GET chamada List.
+- Colocar como endereço da requisição: http://localhost:3333/incidents
+- Colocar como Body da requisição o tipo "No Body".
+- Agora, vamos executar esse método `GET` no Insomnia. Fazemos isso clicando em "Send".
+   - Desta forma, acabamos de obter uma listagem de Incidents:
+   ```json
+   [
+      {
+         "id": 1,
+         "title": "Caso 1",
+         "description": "Detalhes do caso",
+         "value": 120,
+         "ong_id": "83e64a32"
+      }
+   ]  
+   ```
