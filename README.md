@@ -443,3 +443,64 @@ const crypto = require('crypto');
       }
    ]  
    ```
+
+#### @DELETE Incident
+
+- Agora vamos criar uma requisição DELETE.
+- Colocar como endereço da requisição algo como: http://localhost:3333/incidents/1
+- Colocar como Body da requisição o tipo "No Body".
+- Atentar para o campo "Authorization" na aba "Header".
+	- **Este campo deve conter o ID de uma das ONG's já criadas.**
+- Executar esse método `DELETE` no Insomnia. Fazemos isso clicando em "Send".
+   - Desta forma, acabamos de deletar um Incident.
+   - Neste caso específico, nenhuma informação é retornada ao usuário.
+- Agora, vamos atualizar o arquivo `IncidentController.js`:
+   ```javascript
+   const connection = require('../database/connection');
+   const crypto = require('crypto');
+
+   module.exports = {
+      async list(request, response) {
+         const incidents = await connection('incidents').select('*');
+         return response.json(incidents);
+      },
+      async create(request, response) {
+         const { title, description, value } = request.body;
+         const ong_id = request.headers.authorization;
+         const [id] = await connection('incidents').insert({
+            title, description, value, ong_id
+         });
+         return response.json({ id });
+      },
+
+      async delete(request, response) {
+        const { id } = request.params;
+        const ong_id = request.headers.authorization;
+        const incident = await connection('incidents')
+            .where('id', id)
+            .select('ong_id')
+            .first();
+
+        if (incident.ong_id != ong_id) {
+            return response.status(401).json({ error: 'Operation not permitted.' });
+        }
+        await connection('incidents').where('id', id).delete();
+        return response.status(204).send();
+      },
+   };
+   ```
+- Atualizar o arquivo `routes.js` com o seguinte código:
+   ```javascript
+   const express = require('express');
+   const OngController = require('./controllers/OngController');
+   const IncidentController = require('./controllers/IncidentController');
+   const routes = express.Router();
+
+   routes.get('/ongs/', OngController.list);
+   routes.post('/ongs/', OngController.create);
+   routes.get('/incidents/', IncidentController.list);
+   routes.post('/incidents/', IncidentController.create);
+   routes.post('/incidents/:id', IncidentController.delete);
+
+   module.exports = routes;
+   ```
