@@ -504,3 +504,105 @@ const crypto = require('crypto');
 
    module.exports = routes;
    ```
+
+## Listar casos específicos de uma ONG
+
+- No projeto Backend, criar o arquivo `ProfileControllers.js` na pasta `src/controllers/`.
+- Adicionar a ele o seguinte código-fonte:
+   ```javascript
+   const connection = require('../database/connection');
+   module.exports = {
+      async list(request, response) {
+         const ong_id = request.headers.authorization;
+         const incidents = await connection('incidents')
+            .where('ong_id', ong_id)
+            .select('*');
+         return response.json(incidents);
+      }
+   }
+   ```
+- Agora, vamos abrir o Insomnia (não será preciso aqui criar uma pasta), e nela criar uma requisição GET chamada Profile.
+- Colocar como endereço da requisição: http://localhost:3333/profile
+- Criar um cabeçalho na aba "Header", e nele criar uma "Authorization" e inserir como seu valor o ID da ONG que estará conectada ao Incident.
+   - Neste caso, o ID que utilizaremos será o ID da primeira ONG criada. Em nosso caso, este valor equivale a "83e64a32".
+- Atualizar o arquivo `routes.js` com o seguinte código:
+   ```javascript
+   const express = require('express');
+   const OngController = require('./controllers/OngController');
+   const IncidentController = require('./controllers/IncidentController');
+   const ProfileController = require('./controllers/ProfileController');
+   const routes = express.Router();
+
+   routes.get('/ongs/', OngController.list);
+   routes.post('/ongs/', OngController.create);
+
+   routes.get('/incidents/', IncidentController.list);
+   routes.post('/incidents/', IncidentController.create);
+   routes.delete('/incidents/:id', IncidentController.delete);
+
+   routes.get('/profile', ProfileController.list);
+
+   module.exports = routes;
+   ```
+- Agora, basta abrirmos o Insomnia e clicarmos no botão "Send". E pronto, listamos os casos específicos de uma ONG de ID "83e64a32".
+
+## Login de uma ONG
+
+- Esta rota apenas verifica se a ONG existe ou não.
+- No projeto Backend, criar o arquivo `SessionControllers.js` na pasta `src/controllers/`.
+- Adicionar a ele o seguinte código-fonte:
+   ```javascript
+   const connection = require('../database/connection');
+
+   module.exports = {
+      async create(request, response) {
+         const { id } = request.body;
+         const ong = await connection('ongs')
+            .where('id', id)
+            .select('name')
+            .first();
+         if (!ong) {
+            return response.status(400).json({ error: 'No ONG found with this ID.' });
+         }
+         return response.json(ong);
+      }
+   }
+   ```
+- Agora, vamos abrir o Insomnia (não será preciso aqui criar uma pasta), e nela criar uma requisição POST chamada Login.
+- Colocar como endereço da requisição: http://localhost:3333/sessions
+- Colocar como Body da requisição o tipo JSON, com os seguintes dados:
+   ```javascript
+   {
+      "id": "83e64a32"
+   }
+   ```
+- Atualizar o arquivo `routes.js` com o seguinte código:
+   ```javascript
+   const express = require('express');
+   const OngController = require('./controllers/OngController');
+   const IncidentController = require('./controllers/IncidentController');
+   const ProfileController = require('./controllers/ProfileController');
+   const routes = express.Router();
+
+   routes.get('/ongs/', OngController.list);
+   routes.post('/ongs/', OngController.create);
+
+   routes.get('/incidents/', IncidentController.list);
+   routes.post('/incidents/', IncidentController.create);
+   routes.delete('/incidents/:id', IncidentController.delete);
+
+   routes.get('/profile', ProfileController.list);
+   
+   routes.post('/sessions', SessionController.create);
+
+   module.exports = routes;
+   ```
+- Agora, basta abrirmos o Insomnia e clicarmos no botão "Send".
+- Teremos como output:
+   ```javascript
+   {
+      "name": "APAD"
+   }
+   ```
+
+
