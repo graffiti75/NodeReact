@@ -1,13 +1,35 @@
 # NodeReact
 
-## Ferramentas utilizadas no projeto:
+- [Ferramentas utilizadas no projeto](https://github.com/graffiti75/NodeReact#ferramentas-utilizadas-no-projeto)
+- [Criando o projeto Backend](https://github.com/graffiti75/NodeReact#criando-o-projeto-backend)
+- [SPA](https://github.com/graffiti75/NodeReact#spa)
+- [Projeto Frontend](https://github.com/graffiti75/NodeReact#projeto-frontend)
+- [Parâmetros de Backend](https://github.com/graffiti75/NodeReact#par%C3%A2metros-de-backend)
+- [Nodemon](https://github.com/graffiti75/NodeReact#nodemon)
+- [Banco de Dados](https://github.com/graffiti75/NodeReact#bancos-de-dados)
+- [Banco de Dados do Projeto](https://github.com/graffiti75/NodeReact#banco-de-dados-do-projeto)
+- [Migrations](https://github.com/graffiti75/NodeReact#migrations)
+- [Criar os Webservices de ONGs](https://github.com/graffiti75/NodeReact#criar-os-webservices-de-ongs)
+	- [@POST Create ONG](https://github.com/graffiti75/NodeReact#criar-os-webservices-de-ongs)
+	- [@GET List ONGs](https://github.com/graffiti75/NodeReact#get-list-ongs)
+- [Controllers](https://github.com/graffiti75/NodeReact#controllers)
+- [Criar os Webservices de Casos (Incidents)](https://github.com/graffiti75/NodeReact#criar-os-webservices-de-casos-incidents)
+	- [@POST Create Incident](https://github.com/graffiti75/NodeReact#post-create-incident)
+	- [@GET List Incidents](https://github.com/graffiti75/NodeReact#get-list-incidents)
+	- [@DELETE Incident](https://github.com/graffiti75/NodeReact#delete-incident)
+- [Listar casos específicos de uma ONG](https://github.com/graffiti75/NodeReact#listar-casos-espec%C3%ADficos-de-uma-ong)
+- [Login de uma ONG](https://github.com/graffiti75/NodeReact#login-de-uma-ong)
+
+---
+
+## Ferramentas utilizadas no projeto
 
 - Notion.so: Anotações
 - Figma: Design do aplicativo
 - Visual Code Studio
 - Insomnia
    
-## Criando o projeto Backend:
+## Criando o projeto Backend
 
 - Criar projeto NPM:
   `npm init -y`
