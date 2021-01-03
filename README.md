@@ -562,7 +562,7 @@ const crypto = require('crypto');
    routes.post('/incidents/', IncidentController.create);
    routes.delete('/incidents/:id', IncidentController.delete);
 
-   routes.get('/profile', ProfileController.list);
+   routes.get('/profile/', ProfileController.list);
 
    module.exports = routes;
    ```
@@ -613,9 +613,9 @@ const crypto = require('crypto');
    routes.post('/incidents/', IncidentController.create);
    routes.delete('/incidents/:id', IncidentController.delete);
 
-   routes.get('/profile', ProfileController.list);
+   routes.get('/profile/', ProfileController.list);
    
-   routes.post('/sessions', SessionController.create);
+   routes.post('/sessions/', SessionController.create);
 
    module.exports = routes;
    ```
