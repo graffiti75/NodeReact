@@ -19,6 +19,7 @@
 	- [@DELETE Incident](https://github.com/graffiti75/NodeReact#delete-incident)
 - [Listar casos específicos de uma ONG](https://github.com/graffiti75/NodeReact#listar-casos-espec%C3%ADficos-de-uma-ong)
 - [Login de uma ONG](https://github.com/graffiti75/NodeReact#login-de-uma-ong)
+- [Paginação de Casos (Incidents)](https://github.com/graffiti75/NodeReact#login-de-uma-ong)
 
 ---
 
@@ -214,7 +215,7 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
     
 ## Criar os Webservices de ONGs
 
-#### @POST Create ONG
+### @POST Create ONG
 
 - Criar um Folder no Insomnia, com o nome "ONGs", e nele criar uma requisição POST chamada Create.
 - Colocar como endereço da requisição: http://localhost:3333/ongs
@@ -277,7 +278,7 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
 - Agora, vamos abrir o Insomnia e executar o método `POST` para criar ONGs. Fazemos isso clicando em "Send".
    - Desta forma, acabamos de criar uma ONG.
 
-#### @GET List ONGs
+### @GET List ONGs
 
 - Agora vamos criar uma requisição GET chamada List.
 - Colocar como endereço da requisição: http://localhost:3333/ongs
@@ -357,7 +358,7 @@ O conceito por trás do React Native é o SPA (Single Page Applications).
    
 ## Criar os Webservices de Casos (Incidents)
 
-#### @POST Create Incident
+### @POST Create Incident
 
 - No projeto Backend, criar o arquivo `IncidentControllers.js` na pasta `src/controllers/`.
 - Adicionar a ele o seguinte código-fonte:
@@ -413,7 +414,7 @@ const crypto = require('crypto');
    ```
 - Agora, basta abrirmos o Insomnia e clicarmos no botão "Send". E pronto, criamos nosso primeiro Caso para a ONG de ID "83e64a32".
 
-#### @GET List Incidents
+### @GET List Incidents
 
 - Atualizar o arquivo `IncidentController.js`:
    ```javascript
@@ -466,7 +467,7 @@ const crypto = require('crypto');
    ]  
    ```
 
-#### @DELETE Incident
+### @DELETE Incident
 
 - Agora vamos criar uma requisição DELETE.
 - Colocar como endereço da requisição algo como: http://localhost:3333/incidents/1
@@ -627,4 +628,49 @@ const crypto = require('crypto');
    }
    ```
 
+## Paginação de Casos (Incidents)
 
+- Atualmente a listagem de Incidents não possui Paginação.
+- Para implementar tal funcionalidade, precisamos atualizar o `IncidentController.js`:
+   ```javascript
+      async list(request, response) {
+         const { page = 1 } = request.query;
+         const incidents = await connection('incidents')
+            .limit(5)
+            .offset((page - 1) * 5)
+            .select('*');
+         return response.json(incidents);
+      },
+   ```
+- Após isso, podemos testar no Insomnia, no endpoint de `@GET List Incidents`.
+- Precisamos adicionar, como sufixo desse endpoint, o parâmetro `page`, tal qual mostrado ao lado: http://localhost:3333/incidents?page=1
+- Agora, vamos alterar o código-fonte de `IncidentController.js` para incluir nele a informação de total de registros retornados.
+- Tal informação será mostrada via comando `console.log`, tal qual mostrado abaixo:
+   ```javascript
+      async list(request, response) {
+         const { page = 1 } = request.query;
+         const [count] = await connection('incidents').count();
+         console.log(count);
+         const incidents = await connection('incidents')
+            .limit(5)
+            .offset((page - 1) * 5)
+            .select('*');
+         return response.json(incidents);
+      },
+   ```
+- Quando queremos retornar o total de registros de uma query, o aconselhável é retornarmos tal informação dentro do Header da requisição.
+- Isso pode ser feito através do comando `response.header('X-Total-Count', count['count(*)']);`.
+- Dessa forma, atualizando nosso `IncidentController.js`, teríamos o seguinte:
+   ```javascript
+      async list(request, response) {
+         const { page = 1 } = request.query;
+         const [count] = await connection('incidents').count();
+         console.log(count);
+         const incidents = await connection('incidents')
+            .limit(5)
+            .offset((page - 1) * 5)
+            .select('*');
+         response.header('X-Total-Count', count['count(*)']);
+         return response.json(incidents);
+      },
+   ```
