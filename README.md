@@ -19,7 +19,7 @@
 	- [@DELETE Incident](https://github.com/graffiti75/NodeReact#delete-incident)
 - [Listar casos específicos de uma ONG](https://github.com/graffiti75/NodeReact#listar-casos-espec%C3%ADficos-de-uma-ong)
 - [Login de uma ONG](https://github.com/graffiti75/NodeReact#login-de-uma-ong)
-- [Paginação de Casos (Incidents)](https://github.com/graffiti75/NodeReact#login-de-uma-ong)
+- [Paginação de Casos (Incidents)](https://github.com/graffiti75/NodeReact#pagina%C3%A7%C3%A3o-de-casos-incidents)
 
 ---
 
