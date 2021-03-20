@@ -719,3 +719,39 @@ const crypto = require('crypto');
       ...
    ]
    ```
+
+## Adicionando módulo CORS
+
+- Agora, instalaremos um módulo de segurança, chamado CORS.
+- Antes de mais nada, iremos instalar o CORS, via comando (dentro do Visual Studio Code): `npm install cors`
+- Este módulo irá determinar quem poderá acessar nossa aplicação.
+- Para isso, precisamos modificar o arquivo `index.js`:
+   ```javascript
+   const express = require('express');
+   const cors = require('cors');
+   const routes = require('./routes');
+   const app = express();
+
+   app.use(cors());
+   app.use(express.json());
+   app.use(routes);
+
+   app.listen(3333);
+   ```
+- Como estamos apenas em um ambiente de Desenvolvimento, podemos deixar o arquivo acima como está.
+- Desta forma, todas as aplicações FrontEnd poderão acessar esse nosso BackEnd.
+- Porém, se estivéssemos configurando um ambiente de Produção, teríamos de modificar o conteúdo acima pelo seguinte:
+   ```javascript
+   const express = require('express');
+   const cors = require('cors');
+   const routes = require('./routes');
+   const app = express();
+
+   app.use(cors({
+      origin: 'http://meuapp.com' 	// Aqui digitaríamos a URL do nosso site.
+   }));
+   app.use(express.json());
+   app.use(routes);
+
+   app.listen(3333);
+   ```
