@@ -755,3 +755,48 @@ const crypto = require('crypto');
 
    app.listen(3333);
    ```
+
+## Integração com o GitHub
+
+- Agora iremos fazer push desse código aqui no GitHub.
+- Colocaremos as pastas `backend` e `frontend` no mesmo diretório, chamado `BeTheHero`.
+- Após isso, no Visual Studio Code, vamos criar um arquivo chamado `.gitignore` e vamos colocar nele o texto "node_modules".
+- Desta forma, ao realizarmos push de código no GitHub, esta pasta não será adicionada, pois ela é muito grande.
+- Esta pasta contém os arquivos executáveis que fazem o Node rodar.
+- Não é necessário fazer o push dessa pasta pois tudo que precisamos para instalar o Node em nosso projeto se encontra no arquivo `package.json`:
+   ```javascript
+   {
+      "name": "backend",
+      "version": "1.0.0",
+      "description": "",
+      "main": "index.js",
+      "scripts": {
+         "start": "nodemon src/index.js"
+      },
+      "keywords": [],
+      "author": "",
+      "license": "ISC",
+      "dependencies": { 			// <<<<<--------------- DAQUI
+         "cors": "^2.8.5",
+         "express": "^4.17.1",
+         "knex": "^0.21.4",
+         "sqlite3": "^5.0.0" 		// <<<<<--------------- ATÉ AQUI
+      },
+      "devDependencies": {
+         "nodemon": "^2.0.6"
+      }
+   }
+   ```
+- Para instalarmos tais pacotes em nossa aplicação, basta utilizarmos o comando `npm install`
+- Na pasta `frontend`, já existe o arquivo `.gitignore`, então não precisamos criá-lo aqui.
+- Agora, iremos clicar no 3º ícone que consta no menu à esquerda do Visual Studio Code, um ícone de 3 nodos ligados.
+- Este é o ícone referente ao Gerenciador de Repositórios do GitHub.
+- Agora iremos clicar na caixa de texto "Message" e digitar "BackEnd da aplicação".
+- Esta mensagem será a 1ª mensagem de commit do nosso projeto.
+- Agora, clicaremos no ícone de "check" para comitar este ponto na história do nosso projeto.
+- Agora, precisamos mandar esse código para o servidor do GitHub.
+- Digite `CMD + SHIFT + P` e então procure por "remote". Escolha a opção "Git Add Remote".
+- Aparecerá uma caixa de texto, e nela digitaremos o nome do nosso nodo "remote". Neste caso, será `origin`.
+- Após isto, digitaremos a URL do nosso GitHub, neste caso será `https://github.com/graffiti75/NodeReact.git`.
+- Agora, clicaremos nos 3 pontinhos, e escolheremos a opção "Push".
+- **Na tentativa que fiz aqui, tais passos não geraram sucesso. Então, continue o processo todo via Terminal e linha de comando, e aí então, tudo funcionou.**
