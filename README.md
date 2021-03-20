@@ -674,3 +674,48 @@ const crypto = require('crypto');
          return response.json(incidents);
       },
    ```
+   
+## Join de ONG's com Casos (Incidents)
+
+- Atualmente a listagem de Incidents traz como dados de ONG's apenas o atributo `ong_id`.
+- Seria interessante trazer também dados das ONG's.
+- Para isso, precisamos modificar o método `async list(request, response)` do `IncidentController.js`:
+   ```javascript
+   async list(request, response) {
+      const { page = 1 } = request.query;
+      const [count] = await connection('incidents').count();
+      console.log(count);
+      const incidents = await connection('incidents')
+         .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
+         .limit(5)
+         .offset((page - 1) * 5)
+         .select([
+            'incidents.*',
+            'ongs.name',
+            'ongs.email',
+            'ongs.whatsapp',
+            'ongs.city',
+            'ongs.uf'
+         ]);
+      response.header('X-Total-Count', count['count(*)']);
+      return response.json(incidents);
+   },
+   ```
+- Assim, teremos como output:
+   ```javascript
+   [
+      {
+         "id": 2,
+         "title": "Caso 1",
+         "description": "Detalhes do caso",
+         "value": 120,
+         "ong_id": "68f6591a",
+         "name": "Mimissauros",
+         "email": "contato@mimissauros.com.br",
+         "whatsapp": "4700000000",
+         "city": "Lajeado",
+         "uf": "RS"
+      },
+      ...
+   ]
+   ```
